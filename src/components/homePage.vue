@@ -19,8 +19,11 @@
         </button>
       </div>
       <div class="list-container">
+        <div class="allDone" v-if="allDone">
+          Huraay!!<br />All Tasks Are Completed.
+        </div>
         <div class="container-empty" v-if="tasks.length === 0">
-          <div class="image">Hurray !! All Tasks Are Completed!!</div>
+          <div class="image">Please Add Some Tasks In The List !!</div>
         </div>
         <div class="list-iterator" v-for="(task, index) in tasks" :key="index">
           <ul class="list" id="done">
@@ -29,10 +32,13 @@
           <button class="remove" @click="remove(index)">
             <img src="../assets/remove.png" alt="remove" class="remove-icon" />
           </button>
-          <button class="done" @click="done(index)">
+          <button class="done" id="btn" @click="done(index)">
             <img src="../assets/correct.png" alt="remove" class="done-icon" />
           </button>
         </div>
+      </div>
+      <div class="total-count">
+        <div class="count">{{ counter + "/" + tasks.length }}</div>
       </div>
     </div>
   </div>
@@ -44,6 +50,8 @@ export default {
     return {
       createTask: "",
       tasks: [],
+      counter: 0,
+      allDone: false,
     };
   },
   methods: {
@@ -56,11 +64,20 @@ export default {
       }
     },
     done(index) {
+      this.counter++;
+      console.log("printing countetr value", this.counter);
       let ele = document.querySelectorAll("#done");
+      let btn = document.querySelectorAll("#btn");
       for (let i = 0; i < ele.length; i++) {
         if (i === index) {
           ele[i].style.background = "green";
           ele[i].style.color = "white";
+          btn[i].disabled = true;
+          btn[i].style.background = "black";
+        }
+
+        if (this.counter === this.tasks.length) {
+          this.allDone = true;
         }
       }
     },
@@ -250,5 +267,35 @@ export default {
   align-items: center;
   width: 100%;
   height: 100vh;
+}
+.total-count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: 76%;
+  height: 6%;
+  border-radius: 5px;
+  background: whitesmoke;
+  box-shadow: 0px 0px 10px 0px grey;
+  margin-top: 7%;
+}
+.count {
+  font-size: 20px;
+  font-family: helvetica;
+}
+.allDone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border: none;
+  width: 19%;
+  height: 42%;
+  border-radius: 7px;
+  background: #0000008f;
+  font-size: 28px;
+  font-family: helvetica;
+  color: white;
 }
 </style>
