@@ -11,6 +11,7 @@
             placeholder="Create Task"
             class="input-text-box"
             v-model="createTask"
+            @keyup.enter="create"
           />
         </div>
         <button class="create-btn" @click="create">
@@ -22,11 +23,14 @@
           <div class="image">Hurray !! All Tasks Are Completed!!</div>
         </div>
         <div class="list-iterator" v-for="(task, index) in tasks" :key="index">
-          <ul class="list">
+          <ul class="list" id="done">
             <li>{{ task }}</li>
           </ul>
           <button class="remove" @click="remove(index)">
             <img src="../assets/remove.png" alt="remove" class="remove-icon" />
+          </button>
+          <button class="done" @click="done(index)">
+            <img src="../assets/correct.png" alt="remove" class="done-icon" />
           </button>
         </div>
       </div>
@@ -44,8 +48,21 @@ export default {
   },
   methods: {
     create() {
-      this.tasks.push(this.createTask);
-      this.createTask = "";
+      if (this.createTask != "") {
+        this.tasks.push(this.createTask);
+        this.createTask = "";
+      } else {
+        alert("please add some task first");
+      }
+    },
+    done(index) {
+      let ele = document.querySelectorAll("#done");
+      for (let i = 0; i < ele.length; i++) {
+        if (i === index) {
+          ele[i].style.background = "green";
+          ele[i].style.color = "white";
+        }
+      }
     },
     remove(index) {
       this.tasks.splice(index, 1);
@@ -205,9 +222,27 @@ export default {
   width: 100%;
   height: 100%;
 }
+.done {
+  border: none;
+  box-shadow: 0px 0px 10px 0px grey;
+  width: 15%;
+  height: 100%;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.done-icon {
+  width: 100%;
+  height: 79%;
+}
 
 .remove:active {
   background-color: red;
+}
+.done:active {
+  background: blue;
 }
 .container-empty {
   display: flex;
